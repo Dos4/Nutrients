@@ -1,0 +1,141 @@
+class Diet
+{
+    public List<Product> products = new List<Product>();
+    public int TotalCalories { get; set; }
+    public int TotalCarbs { get; set; }
+    public int TotalFats { get; set; }
+    public int TotalProteins { get; set; }
+
+    public int GetTotalCarbs()
+    {
+        foreach (Product product in products)
+        {
+            TotalCarbs += product.Nutrients.Carbs;
+        }
+
+        return TotalCarbs;
+    }
+
+    public int GetTotalFats()
+    {
+        foreach (Product product in products)
+        {
+            TotalFats += product.Nutrients.Fats;
+        }
+
+        return TotalFats;
+    }
+
+    public int GetTotalProteins()
+    {
+        foreach (Product product in products)
+        {
+            TotalProteins += product.Nutrients.Proteins;
+        }
+
+        return TotalProteins;
+    }
+
+    public int GetTotalCalories()
+    {
+        foreach (Product product in products)
+        {
+            TotalCalories += product.Mass;
+        }
+
+        return TotalCalories;
+    }
+}
+
+class Nutrients
+{
+    public int Carbs { get; set; }
+    public int Fats { get; set; }
+    public int Proteins { get; set; }
+
+    public Nutrients(int carbs, int fats, int proteins)
+    {
+        this.Carbs = carbs;
+        this.Fats = fats;
+        this.Proteins = proteins;
+    }
+}
+
+abstract class Product
+{
+    public Nutrients Nutrients { get; set; }
+    public int Mass { get; set; }
+
+    public int CalculateCalories()
+    {
+        Mass += Nutrients.Carbs * 4 + Nutrients.Fats * 9 + Nutrients.Proteins * 4;
+        return Mass;
+    }
+}
+
+class Milk : Product { }
+
+class Beef : Product { }
+
+class KitKat : Product { }
+
+class Mango : Product { }
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        Milk milk = new Milk
+        {
+            Nutrients = new Nutrients(9, 10, 20),
+        };
+
+        milk.CalculateCalories();
+        Console.WriteLine($"Milk calories: {milk.Mass}");
+
+        Beef beef = new Beef
+        {
+            Nutrients = new Nutrients(10, 3, 24),
+        };
+
+        beef.CalculateCalories();
+        Console.WriteLine($"\nBeef calories: {beef.Mass}");
+
+        KitKat kitKat = new KitKat
+        {
+            Nutrients = new Nutrients(8, 3, 13),
+        };
+
+        kitKat.CalculateCalories();
+        Console.WriteLine($"\nKitKat calories: {kitKat.Mass}");
+
+        Mango mango = new Mango
+        {
+            Nutrients = new Nutrients(26, 8, 14),
+        };
+
+        mango.CalculateCalories();
+        Console.WriteLine($"\nMango calories: {mango.Mass}");
+
+        Console.WriteLine("\n----------------------------------------------");
+
+        Diet diet = new Diet();
+
+        diet.products.Add(milk);
+        diet.products.Add(beef);
+        diet.products.Add(kitKat);
+        diet.products.Add(mango);
+
+        diet.GetTotalCarbs();
+        Console.WriteLine($"\nTotal carbs: {diet.TotalCarbs}");
+
+        diet.GetTotalFats();
+        Console.WriteLine($"\nTotal fats: {diet.TotalFats}");
+
+        diet.GetTotalProteins();
+        Console.WriteLine($"\nTotal proteins: {diet.TotalProteins}");
+
+        diet.GetTotalCalories();
+        Console.WriteLine($"\nTotal calories: {diet.TotalCalories}");
+    }
+}
